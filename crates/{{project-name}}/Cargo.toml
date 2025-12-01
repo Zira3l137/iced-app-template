@@ -1,0 +1,18 @@
+[package]
+name = "{{project-name}}"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.12"
+
+[dependencies]
+
+{{project-name}}-cli = { path = "../{{project-name}}-cli" }
+{{project-name}}-core = { path = "../{{project-name}}-core" }
+strum = { workspace = true }
+tracing = { workspace = true }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+iced = { version = "0.13.1", features = ["advanced", "image", "svg"] }

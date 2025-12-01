@@ -1,0 +1,8 @@
+/target
+/.cargo
+
+*.ps1
+*.bat
+*.log
+
+Cargo.lock

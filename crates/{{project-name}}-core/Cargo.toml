@@ -1,0 +1,15 @@
+[package]
+name = "{{project-name}}-core"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+
+[dependencies]
+strum = { workspace = true }
+thiserror = "2.0.17"
+derive_more = { version = "2.0.1", features = ["display"] }
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
+hashbrown = { version = "0.16.1", features = ["serde"] }
+ahash = { version = "0.8.12", features = ["serde"] }
