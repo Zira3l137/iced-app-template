@@ -131,9 +131,13 @@ impl Application {
 }
 
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
-    iced::daemon(constants::APP_TITLE, Application::update, Application::view)
-        .theme(|state, _| Application::theme(state))
+    fn app_theme(state: &Application, _: iced::window::Id) -> iced::Theme {
+        Application::theme(state)
+    }
+
+    iced::daemon(Application::new, Application::update, Application::view)
+        .theme(app_theme)
         .subscription(Application::subscription)
-        .run_with(move || Application::new())?;
+        .run();
     Ok(())
 }

@@ -12,7 +12,6 @@ use iced::advanced::renderer;
 use iced::advanced::text;
 use iced::advanced::widget::Tree;
 use iced::alignment;
-use iced::event;
 use iced::widget::text::Fragment;
 use iced::widget::text::LineHeight;
 use iced::widget::text::Shaping;
@@ -146,9 +145,7 @@ where
 
     fn state(&self) -> iced::advanced::widget::tree::State {
         iced::advanced::widget::tree::State::new(State {
-            text_state: iced::advanced::widget::text::State::<Renderer::Paragraph>(
-                iced::advanced::text::paragraph::Plain::default(),
-            ),
+            text_state: iced::advanced::text::paragraph::Plain::<Renderer::Paragraph>::default(),
             is_pressed: false,
         })
     }
@@ -157,22 +154,24 @@ where
         iced::advanced::widget::tree::Tag::of::<State<Renderer::Paragraph>>()
     }
 
-    fn layout(&self, tree: &mut Tree, renderer: &Renderer, limits: &layout::Limits) -> layout::Node {
+    fn layout(&mut self, tree: &mut Tree, renderer: &Renderer, limits: &layout::Limits) -> layout::Node {
         let state = tree.state.downcast_mut::<State<Renderer::Paragraph>>();
         iced::advanced::widget::text::layout(
             &mut state.text_state,
             renderer,
             limits,
-            self.width,
-            self.height,
             &self.fragment,
-            self.line_height,
-            self.size,
-            self.font,
-            self.horizontal_alignment,
-            self.vertical_alignment,
-            self.shaping,
-            self.wrapping,
+            iced::advanced::widget::text::Format {
+                width: self.width,
+                height: self.height,
+                line_height: self.line_height,
+                size: self.size,
+                font: self.font,
+                shaping: self.shaping,
+                wrapping: self.wrapping,
+                align_x: self.horizontal_alignment.into(),
+                align_y: self.vertical_alignment,
+            },
         )
     }
 
@@ -188,7 +187,7 @@ where
     ) {
         let state = tree.state.downcast_ref::<State<Renderer::Paragraph>>();
         let palette_ext = theme.extended_palette();
-        let paragraph = state.text_state.0.raw();
+        let paragraph = state.text_state.raw();
 
         let bounds = layout.bounds();
 
@@ -259,17 +258,17 @@ where
         }
     }
 
-    fn on_event(
+    fn update(
         &mut self,
         tree: &mut Tree,
-        event: iced::Event,
+        event: &iced::Event,
         layout: Layout<'_>,
         cursor: mouse::Cursor,
         _renderer: &Renderer,
         _clipboard: &mut dyn iced::advanced::Clipboard,
         shell: &mut iced::advanced::Shell<'_, Message>,
         _viewport: &Rectangle,
-    ) -> iced::advanced::graphics::core::event::Status {
+    ) {
         if let Some(passed_message) = &self.passed_message {
             let state = tree.state.downcast_mut::<State<Renderer::Paragraph>>();
             let is_over = cursor.is_over(layout.bounds());
@@ -278,9 +277,6 @@ where
                 iced::Event::Mouse(mouse::Event::ButtonPressed(mouse::Button::Left)) => {
                     if is_over {
                         state.is_pressed = true;
-                        event::Status::Captured
-                    } else {
-                        event::Status::Ignored
                     }
                 }
                 iced::Event::Mouse(mouse::Event::ButtonReleased(mouse::Button::Left)) => {
@@ -289,15 +285,10 @@ where
                         if is_over {
                             shell.publish(passed_message.clone());
                         }
-                        event::Status::Captured
-                    } else {
-                        event::Status::Ignored
                     }
                 }
-                _ => event::Status::Ignored,
+                _ => (),
             }
-        } else {
-            event::Status::Ignored
         }
     }
 }

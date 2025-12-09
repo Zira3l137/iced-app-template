@@ -62,7 +62,7 @@
 pub mod clickable_text;
 pub mod macros;
 
-use {{crate_name}}_core::{constants::APP_FONT_FAMILY_NAME, types::Icon};
+use migration_core::{constants::APP_FONT_FAMILY_NAME, types::Icon};
 
 // ============================================================================
 // Icon Builder
@@ -270,6 +270,7 @@ where
     border_radius: Option<f32>,
     shadow_blur_radius: Option<f32>,
     shadow_offset: Option<V>,
+    snap: Option<bool>,
 }
 
 impl<'a, Message, B, C, V> FrameBuilder<'a, Message, B, C, V>
@@ -294,6 +295,7 @@ where
             border_radius: None,
             shadow_blur_radius: None,
             shadow_offset: None,
+            snap: None,
         }
     }
 
@@ -367,6 +369,7 @@ where
         let border_radius = self.border_radius;
         let shadow_blur_radius = self.shadow_blur_radius;
         let shadow_offset = self.shadow_offset;
+        let snap = self.snap;
 
         iced::widget::container(self.content).style(move |theme| {
             let palette_ext = theme.extended_palette();
@@ -403,6 +406,7 @@ where
 
             let border_width = border_width.unwrap_or(1.0);
             let shadow_blur_radius = shadow_blur_radius.unwrap_or(0.0);
+            let snap = snap.unwrap_or(false);
 
             iced::widget::container::Style {
                 text_color: Some(text_color),
@@ -417,6 +421,7 @@ where
                     offset: shadow_offset,
                     blur_radius: shadow_blur_radius,
                 },
+                snap,
             }
         })
     }
@@ -514,6 +519,7 @@ where
     border_width: Option<f32>,
     border_radius: Option<f32>,
     shadow_offset: Option<iced::Vector>,
+    snap: Option<bool>,
 }
 
 impl<'a, Message, B, C> ButtonBuilder<'a, Message, B, C>
@@ -537,6 +543,7 @@ where
             border_width: None,
             border_radius: None,
             shadow_offset: None,
+            snap: None,
         }
     }
 
@@ -656,6 +663,7 @@ where
         let border_width = self.border_width;
         let border_radius = self.border_radius;
         let shadow_offset = self.shadow_offset;
+        let snap = self.snap;
 
         iced::widget::button(self.content).style(move |theme, status| {
             let palette_ext = theme.extended_palette();
@@ -758,6 +766,7 @@ where
 
             let border_radius =
                 border_radius.map(|r| r.into()).unwrap_or_else(|| iced::border::Radius::default());
+            let snap = snap.unwrap_or(false);
 
             iced::widget::button::Style {
                 background: Some(background),
@@ -768,6 +777,7 @@ where
                     radius: border_radius,
                 },
                 shadow,
+                snap,
             }
         })
     }
@@ -1319,7 +1329,19 @@ where
                         let border = hovered.border_color.clone().map(|c| c.into()).unwrap_or(base_border);
                         (bg, icon, value, placeholder, selection, border, 1.5)
                     }
-                    iced::widget::text_input::Status::Focused => {
+                    iced::widget::text_input::Status::Focused { is_hovered: false } => {
+                        // Fallback: Use active colors with enhanced border
+                        let bg = focused.background.clone().map(|b| b.into()).unwrap_or(base_bg);
+                        let icon = focused.icon_color.clone().map(|c| c.into()).unwrap_or(base_icon);
+                        let value = focused.value_color.clone().map(|c| c.into()).unwrap_or(base_value);
+                        let placeholder =
+                            focused.placeholder_color.clone().map(|c| c.into()).unwrap_or(base_placeholder);
+                        let selection =
+                            focused.selection_color.clone().map(|c| c.into()).unwrap_or(base_selection);
+                        let border = focused.border_color.clone().map(|c| c.into()).unwrap_or(base_border);
+                        (bg, icon, value, placeholder, selection, border, 2.0)
+                    }
+                    iced::widget::text_input::Status::Focused { is_hovered: true } => {
                         // Fallback: Use active colors with enhanced border
                         let bg = focused.background.clone().map(|b| b.into()).unwrap_or(base_bg);
                         let icon = focused.icon_color.clone().map(|c| c.into()).unwrap_or(base_icon);
