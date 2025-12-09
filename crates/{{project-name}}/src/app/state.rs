@@ -1,6 +1,6 @@
 use iced::window::Id;
 
-use {{crate_name}}_core::types::Lookup;
+use migration_core::types::Lookup;
 
 use super::features::FeaturesState;
 use super::theme;
@@ -14,6 +14,7 @@ pub struct ApplicationState {
 
 #[derive(Debug)]
 pub struct UiState {
+    pub current_theme: String,
     pub themes: Lookup<String, iced::Theme>,
     pub windows: Lookup<Id, WindowInfo>,
 }
@@ -21,6 +22,7 @@ pub struct UiState {
 impl Default for UiState {
     fn default() -> Self {
         Self {
+            current_theme: theme::DEFAULT_THEME.to_owned(),
             themes: theme::default_themes()
                 .iter()
                 .map(|(name, theme)| ((*name).to_owned(), theme.clone()))

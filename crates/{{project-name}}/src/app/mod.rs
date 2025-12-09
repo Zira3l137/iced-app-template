@@ -24,6 +24,7 @@ pub struct Application {
 impl Application {
     fn init_session(state: &mut state::ApplicationState, session: &session::ApplicationSession) {
         if let Some(theme) = &session.theme_selected {
+            state.ui.current_theme = theme.clone();
             // INFO: Manage your session here
         }
     }
@@ -80,7 +81,7 @@ impl Application {
 
                     windows::invoke_window(&mut self.state, &window)
                 }
-                message::WindowMessage::InitializeMainWindow => windows::invoke_window(&mut self.state, windows::ApplicationWindow::Root),
+                message::WindowMessage::InitializeMainWindow => windows::invoke_window(&mut self.state, &windows::ApplicationWindow::Root),
             },
 
             message::AppMessage::System(msg) => match msg {
@@ -111,7 +112,7 @@ impl Application {
     }
 
     pub fn theme(&self) -> iced::Theme {
-        let theme_name = &self.state.features.settings.current_theme;
+        let theme_name = &self.state.ui.current_theme;
         self.state.ui.themes.get(theme_name).cloned().unwrap_or_else(|| {
             if let Some(theme) = &self.session.theme_selected {
                 tracing::warn!("Theme {theme} not found, defaulting to dark");
