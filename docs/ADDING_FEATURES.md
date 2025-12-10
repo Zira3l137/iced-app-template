@@ -326,7 +326,7 @@ pub fn view<'a>(app: &'a crate::app::Application) -> iced::Element<'a, Message> 
 **Using custom widgets:**
 
 ```rust
-use crate::{frame, icon, nerd_text, button, clickable_text};
+use crate::{frame, icon, nerd_text, button, gradient};
 use crate::core::types::Icon;
 
 // Styled button with state-specific colors
@@ -348,12 +348,11 @@ frame!(
 // Icon
 icon!(Icon::Settings, size: 24, color: palette.primary)
 
-// Clickable text (like a link)
-clickable_text!(
-    "Click me",
-    color = palette.primary,
-    color_hovered = palette.primary * 0.8
-).on_press(Message::LinkClicked)
+// Gradient background for hero sections
+let hero_bg = gradient!(
+    palette.primary => 0.0,
+    palette.background => 1.0
+);
 ```
 
 ### Step 7: Register the Feature

@@ -7,15 +7,16 @@ It is not an application itself, but a starting point you can clone into your ow
 
 - **Multi-crate workspace**: separates concerns into:
   - `{{project-name}}` – GUI application crate (Iced)
-  - `{{project-name}}-core` – shared types, constants, logging, and error handling
+  - `{{project-name}}-core` – shared types, constants, logging, and `anyhow`-based error helpers
   - `{{project-name}}-cli` – optional CLI/entry helpers
 - **Batteries-included app shell**:
   - Application/session state split (runtime vs persistent)
   - Window and feature routing driven by a `register_features!` macro
   - Theming hooks and a bundled Nerd Font for rich UI
 - **Reusable widget library**:
-  - Macros (`button!`, `frame!`, `nerd_text!`, `icon!`, `clickable_text!`, `gradient!`)
+  - Macros (`button!`, `frame!`, `nerd_text!`, `icon!`, `gradient!`)
   - Builder-pattern APIs in `app/widgets` for advanced customization
+- **Targets Iced 0.14.0** with the new `iced::daemon` runtime setup
 - **Documentation-first**:
   - `QUICKSTART.md` – orientation and basic workflow
   - `ARCHITECTURE.md` – how the application shell is structured

@@ -16,11 +16,10 @@ This document explains the custom widgets and macros available in the `{{project
 
 ## Overview
 
-`{{project-name}}` provides several custom widgets and macros to make UI development easier and more consistent:
+`{{project-name}}` provides several custom widgets and macros to make UI development easier and more consistent (tested with **Iced 0.14.0**):
 
 - **`nerd_text!`** - Text with Nerd Font support (for icons in text)
 - **`icon!`** - Standalone icon widget
-- **`clickable_text!`** - Hoverable, clickable text (like a hyperlink)
 - **`frame!`** - Styled container with borders and shadows
 - **`button!`** - Highly customizable button
 - **`gradient!`** - Linear gradients for backgrounds
@@ -173,54 +172,6 @@ Icon::About,       // 
 Icon::Edit,        // 
 Icon::Copy,        // 󰆏
 // ...
-```
-
----
-
-### `clickable_text!` - Interactive Text
-
-Create text that changes appearance on hover and can be clicked.
-
-**Usage:**
-
-```rust
-use crate::clickable_text;
-
-// Basic
-clickable_text!("Click me")
-    .on_press(Message::TextClicked)
-
-// With colors
-clickable_text!(
-    "Click me",
-    color = palette.primary,
-    color_hovered = palette.primary * 0.8
-).on_press(Message::TextClicked)
-
-// With formatting
-let url = "https://example.com";
-clickable_text!(
-    ("{}", url),
-    size = 14.0,
-    color = palette.primary,
-    color_hovered = palette_ext.primary.strong.color
-).on_press(Message::OpenUrl(url.to_string()))
-```
-
-**Example - Hyperlink:**
-
-```rust
-let link = clickable_text!(
-    constants::APP_REPOSITORY,
-    color = palette_ext.primary.base.color,
-    color_hovered = palette_ext.primary.strong.color
-).on_press(Message::OpenRepo);
-
-// Use in a row
-row![
-    nerd_text!("Repository: "),
-    link
-]
 ```
 
 ---

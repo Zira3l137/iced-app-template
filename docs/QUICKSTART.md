@@ -2,6 +2,8 @@
 
 Get up and running with `{{project-name}}` development in 5 minutes.
 
+**Built with Iced 0.14.0 and `anyhow`-based error handling.**
+
 ## For Users
 
 Because this is a template, the concrete behavior of the final application depends on how you customize it.
@@ -76,6 +78,7 @@ src/
 1. `src/app/features/root.rs` - Example of a complete feature
 2. `docs/ADDING_FEATURES.md` - How to add your own features
 3. `docs/ARCHITECTURE.md` - Understand the design
+4. `crates/{{project-name}}-core/src/error.rs` - Shared `anyhow::Result` alias + helpers
 
 ### Adding Your First Feature (10 minutes)
 

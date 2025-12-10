@@ -67,8 +67,7 @@ This document explains the structure and design patterns used in `{{project-name
 │   │   │   ├── root.rs      # Main application view / primary feature
 │   │   │   └── settings.rs  # Settings/about view
 │   │   └── widgets/         # Reusable UI components
-│   │       ├── mod.rs       # Widget utilities and macros
-│   │       └── clickable_text.rs
+│   │       └── mod.rs       # Widget utilities and macros
 │   ├── cli/                 # Command-line argument parsing
 │   ├── core/                # Core types and constants
 │   ├── error.rs             # Error types
@@ -294,18 +293,16 @@ Each feature is a self-contained module with:
 ### `src/app/widgets/`
 
 **Reusable UI components:**
-- `mod.rs` - Builder pattern implementations for widgets
+- `mod.rs` - Builder pattern implementations for widgets (button, frame, text, icon, gradient, text input)
 - `macros.rs` - Convenience macros wrapping builders
-- `clickable_text.rs` - Hoverable clickable text widget
 
 **Available macros:**
 - `icon!()` - Render Nerd Font icons
 - `nerd_text!()` - Text with custom font
-- `clickable_text!()` - Hoverable clickable text
 - `frame!()` - Styled container
 - `button!()` - Customizable button with state styling
 - `gradient!()` - Linear gradients for backgrounds
-- `text_input!()` - Linear gradients for backgrounds
+- `text_input!()` - Styled text input with state-aware colors
 
 **Builder Pattern:**
 All widgets have corresponding builder structs (`IconBuilder`, `ButtonBuilder`, etc.) 
@@ -316,6 +313,7 @@ for more advanced customization. Macros provide a simpler API for common cases.
 **Core types and constants:**
 - `types.rs` - Type aliases (Lookup, Icon enum)
 - `constants.rs` - App metadata and paths
+- `error.rs` - Workspace-wide `anyhow::Result` alias and helpers
 
 ### `src/persistence/`
 
