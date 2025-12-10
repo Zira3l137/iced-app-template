@@ -1,6 +1,6 @@
 use iced::window::Id;
 
-use migration_core::types::Lookup;
+use {{project-name}}_core::types::Lookup;
 
 use super::features::FeaturesState;
 use super::theme;

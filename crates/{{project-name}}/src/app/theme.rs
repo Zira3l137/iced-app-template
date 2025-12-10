@@ -1,3 +1,5 @@
+pub const DEFAULT_THEME: &str = "Light";
+
 pub fn default_themes<'a>() -> [(&'a str, iced::Theme); 22] {
     [
         ("Light", iced::Theme::Light),

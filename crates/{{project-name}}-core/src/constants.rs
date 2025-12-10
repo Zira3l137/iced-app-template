@@ -46,7 +46,7 @@ pub fn resources_path() -> Result<PathBuf> {
     let exe_path = std::env::current_exe()?;
     let exe_dir = exe_path
         .parent()
-        .ok_or_else(|| crate::error::Error::other("Failed to get executable path", "resources_path"))?;
+        .ok_or_else(|| crate::error::other_error("Failed to get executable path", "resources_path"))?;
 
     Ok(exe_dir.join("resources").canonicalize()?)
 }

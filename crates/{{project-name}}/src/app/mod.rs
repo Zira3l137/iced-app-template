@@ -7,7 +7,7 @@ pub mod theme;
 pub mod widgets;
 pub mod windows;
 
-use {{crate_name}}_core::{constants, error::Error, types::Lookup};
+use {{crate_name}}_core::{constants, error::other_error, types::Lookup};
 use features::route_feature_update;
 
 use crate::persistence;
@@ -44,7 +44,7 @@ impl Application {
         (app, iced::Task::done(message::AppMessage::Window(message::WindowMessage::InitializeMainWindow)))
     }
 
-    fn load_font(&self) -> iced::Task<Result<(), Error>> {
+    fn load_font(&self) -> iced::Task<Result<(), anyhow::Error>> {
         use std::path::PathBuf;
 
         let font_path = match constants::resources_path() {
@@ -57,7 +57,7 @@ impl Application {
 
         match std::fs::read(&font_path) {
             Ok(bytes) => iced::font::load(bytes)
-                .map(|o| o.map_err(|_| Error::other("Failed to load font", "Application::load_font"))),
+                .map(|o| o.map_err(|_| other_error("Failed to load font", "Application::load_font"))),
             Err(e) => iced::Task::done(Err(e.into())),
         }
     }
@@ -81,7 +81,10 @@ impl Application {
 
                     windows::invoke_window(&mut self.state, &window)
                 }
-                message::WindowMessage::InitializeMainWindow => windows::invoke_window(&mut self.state, &windows::ApplicationWindow::Root),
+                message::WindowMessage::InitializeMainWindow => {
+                    windows::invoke_window(&mut self.state, &windows::ApplicationWindow::Root)
+                }
+
             },
 
             message::AppMessage::System(msg) => match msg {
@@ -121,7 +124,7 @@ impl Application {
         })
     }
 
-    pub fn view(&self, id: iced::window::Id) -> AppElement {
+    pub fn view<'a>(&'a self, id: iced::window::Id) -> AppElement<'a> {
         if let Some((_, wnd_state)) = self.state.ui.windows.iter().find(|(wnd_id, _)| **wnd_id == id) {
             wnd_state.window_type.view(self)
         } else {
@@ -130,7 +133,7 @@ impl Application {
     }
 }
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+pub fn run() -> Result<(), iced::Error> {
     fn app_theme(state: &Application, _: iced::window::Id) -> iced::Theme {
         Application::theme(state)
     }
@@ -138,6 +141,5 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     iced::daemon(Application::new, Application::update, Application::view)
         .theme(app_theme)
         .subscription(Application::subscription)
-        .run();
-    Ok(())
+        .run()
 }

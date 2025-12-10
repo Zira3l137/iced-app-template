@@ -56,13 +56,11 @@
 //! - [`FrameBuilder`]: Create containers with borders and shadows
 //! - [`ButtonBuilder`]: Create buttons with state-specific styling
 //! - [`GradientBuilder`]: Create linear gradients with color stops
-//! - [`ClickableTextBuilder`]: Create clickable text with optional styling
 //! - [`TextInputBuilder`]: Create text input fields with optional styling
 
-pub mod clickable_text;
 pub mod macros;
 
-use migration_core::{constants::APP_FONT_FAMILY_NAME, types::Icon};
+use {{project-name}}_core::{constants::APP_FONT_FAMILY_NAME, types::Icon};
 
 // ============================================================================
 // Icon Builder
@@ -855,130 +853,6 @@ impl GradientBuilder {
 impl Default for GradientBuilder {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-// ============================================================================
-// ClickableText Builder
-// ============================================================================
-
-/// Builder for creating clickable text widgets with hover effects.
-///
-/// Creates text that changes appearance on hover and responds to clicks.
-///
-/// # Examples
-///
-/// ```rust
-/// use crate::app::widgets::builder::ClickableTextBuilder;
-/// use iced::Color;
-///
-/// // Simple clickable text
-/// let link = ClickableTextBuilder::new("Click me")
-///     .build()
-///     .on_press(Message::Clicked);
-///
-/// // Styled clickable text
-/// let styled_link = ClickableTextBuilder::new("Visit Site")
-///     .color(Color::from_rgb(0.2, 0.6, 1.0))
-///     .color_hovered(Color::from_rgb(0.3, 0.7, 1.0))
-///     .size(16)
-///     .build()
-///     .on_press(Message::OpenLink);
-/// ```
-pub struct ClickableTextBuilder<'a, T> {
-    text: T,
-    size: Option<iced::Pixels>,
-    color: Option<iced::Color>,
-    color_hovered: Option<iced::Color>,
-    color_disabled: Option<iced::Color>,
-    _phantom: std::marker::PhantomData<&'a ()>,
-}
-
-impl<'a, T: iced::widget::text::IntoFragment<'a>> ClickableTextBuilder<'a, T> {
-    /// Creates a new clickable text builder with the specified text content.
-    ///
-    /// # Arguments
-    ///
-    /// * `text` - The text content to display
-    pub fn new(text: T) -> Self {
-        Self {
-            text,
-            size: None,
-            color: None,
-            color_hovered: None,
-            color_disabled: None,
-            _phantom: std::marker::PhantomData,
-        }
-    }
-
-    /// Sets the size of the text.
-    ///
-    /// # Arguments
-    ///
-    /// * `size` - Font size in pixels
-    pub fn size(mut self, size: impl Into<iced::Pixels>) -> Self {
-        self.size = Some(size.into());
-        self
-    }
-
-    /// Sets the color of the text in its idle (normal) state.
-    ///
-    /// # Arguments
-    ///
-    /// * `color` - The text color
-    pub fn color(mut self, color: impl Into<iced::Color>) -> Self {
-        self.color = Some(color.into());
-        self
-    }
-
-    /// Sets the color of the text when hovered.
-    ///
-    /// # Arguments
-    ///
-    /// * `color` - The hover color
-    pub fn color_hovered(mut self, color: impl Into<iced::Color>) -> Self {
-        self.color_hovered = Some(color.into());
-        self
-    }
-
-    /// Sets the color of the text when disabled.
-    ///
-    /// # Arguments
-    ///
-    /// * `color` - The disabled color
-    pub fn color_disabled(mut self, color: impl Into<iced::Color>) -> Self {
-        self.color_disabled = Some(color.into());
-        self
-    }
-
-    /// Builds the clickable text widget.
-    ///
-    /// Returns a `ClickableText` widget ready to have `.on_press()` called.
-    pub fn build<Renderer, Message>(self) -> clickable_text::ClickableText<'a, Renderer, Message>
-    where
-        Renderer: iced::advanced::text::Renderer,
-        <Renderer as iced::advanced::text::Renderer>::Font: From<iced::Font>,
-    {
-        let font = iced::font::Font::with_name(APP_FONT_FAMILY_NAME);
-        let mut widget = clickable_text::ClickableText::new(self.text).font(font);
-
-        if let Some(size) = self.size {
-            widget = widget.size(size);
-        }
-
-        if let Some(color) = self.color {
-            widget = widget.color(color);
-        }
-
-        if let Some(color_hovered) = self.color_hovered {
-            widget = widget.color_hovered(color_hovered);
-        }
-
-        if let Some(color_disabled) = self.color_disabled {
-            widget = widget.color_disabled(color_disabled);
-        }
-
-        widget
     }
 }
 
