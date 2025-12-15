@@ -6,7 +6,7 @@ use std::path::PathBuf;
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_AUTHORS: &str = env!("CARGO_PKG_AUTHORS");
 pub const APP_REPOSITORY: &str = env!("CARGO_PKG_REPOSITORY");
-pub const APP_TITLE: &str = "Env Inspector";
+pub const APP_TITLE: &str = "{{project-name}}";
 
 pub const APP_FONT_NAME: &str = "MonacoLigaturizedNerdFont.ttf";
 pub const APP_FONT_FAMILY_NAME: &str = "MonacoLigaturized Nerd Font";
