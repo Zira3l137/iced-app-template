@@ -102,7 +102,10 @@ pub fn read_user_themes<P: AsRef<Path>>(path: P) -> Result<Vec<iced::Theme>> {
 }
 
 pub fn load_available_themes<P: AsRef<Path>>(state: &mut State, path: P) {
+    tracing::info!("Loading registered themes");
     let registered_themes = registered_themes();
+
+    tracing::info!("Loading user themes");
     let user_themes = read_user_themes(path)
         .inspect_err(|e| tracing::error!("Failed to read user themes: {}", e))
         .unwrap_or_default();

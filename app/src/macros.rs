@@ -31,6 +31,7 @@ macro_rules! register_features {
 
         pub fn initialize_features(state: &mut $crate::app::state::State) {
             $(
+                tracing::info!("Initializing feature: {}", stringify!($module));
                 $module::state::initialize(state);
             )+
         }
@@ -124,6 +125,7 @@ macro_rules! register_session {
             session: &crate::app::Session,
             state: &mut crate::app::state::State,
         ) {
+            tracing::info!("Loading previous session");
             $(
                 <$field_struct as crate::app::session::SessionField>::load_from_session(session, state);
             )+
@@ -133,6 +135,7 @@ macro_rules! register_session {
             state: &crate::app::state::State,
             session: &mut crate::app::session::Session,
         ) {
+            tracing::info!("Saving current session");
             $(
                 <$field_struct as crate::app::session::SessionField>::save_to_session(state, session);
             )+

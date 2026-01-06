@@ -3,6 +3,7 @@
 /resources
 session.json
 settings.toml
+*.log
 *.ps1
 *.sh
 *.nu
