@@ -28,6 +28,12 @@ macro_rules! register_features {
                 )+
             }
         }
+
+        pub fn initialize_features(state: &mut $crate::app::state::State) {
+            $(
+                $module::state::initialize(state);
+            )+
+        }
     };
 }
 

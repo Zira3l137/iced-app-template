@@ -6,7 +6,7 @@ mod state;
 mod theme;
 
 use crate::utils::io::read_fonts;
-use features::route_feature_update;
+use features::{initialize_features, route_feature_update};
 use message::{Message, SystemMessage, WindowMessage};
 use session::{Session, load_session_to_state, read_session, save_state_to_session, write_session};
 use settings::read_settings;
@@ -16,10 +16,7 @@ use theme::load_available_themes;
 use std::path::PathBuf;
 
 use anyhow::{Context, Result};
-use iced::{
-    Element, Font, Settings, Subscription, Task, Theme, daemon, event,
-    widget::combo_box::State as ComboBoxState, window,
-};
+use iced::{Element, Font, Settings, Subscription, Task, Theme, daemon, event, window};
 
 pub struct App {
     state: State,
@@ -33,10 +30,7 @@ impl App {
 
         load_session_to_state(&session, &mut state);
         load_available_themes(&mut state, "themes");
-
-        // FIXME: Ugly
-        state.features.main.theme_options =
-            ComboBoxState::new(state.themes.keys().cloned().collect());
+        initialize_features(&mut state);
 
         (Self { state, session }, Task::done(Message::Window(WindowMessage::Invoke(Window::Main))))
     }
