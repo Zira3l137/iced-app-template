@@ -1,0 +1,9 @@
+
+
+[package]
+name = "app-core"        # replace with placeholder
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+[dependencies]

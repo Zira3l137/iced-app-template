@@ -1,0 +1,10 @@
+
+[package]
+name = "app-cli"         # replace with placeholder
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+[dependencies]
+tracing.workspace = true
+clap.workspace = true

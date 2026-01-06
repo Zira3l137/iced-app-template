@@ -1,0 +1,8 @@
+/target
+/themes
+/resources
+session.json
+settings.toml
+*.ps1
+*.sh
+*.nu

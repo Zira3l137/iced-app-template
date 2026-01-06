@@ -1,0 +1,19 @@
+
+[workspace]
+members = ["app", "app-core", "app-cli"] # replace with placeholder
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Zira3l137"] # replace with placeholder
+edition = "2024"
+
+[workspace.dependencies]
+toml = "0.9.10"
+tracing = "0.1.44"
+serde_json = "1.0.148"
+serde = { version = "1.0.228", features = ["derive"] }
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
+clap = { version = "4.5.54", features = ["derive"] }
+anyhow = { version = "1.0.100", features = ["backtrace"] }
+iced = { version = "0.14.0", features = ["advanced", "image"] }
