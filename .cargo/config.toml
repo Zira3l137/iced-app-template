@@ -1,0 +1,4 @@
+[env]
+WGPU_BACKEND = "vulkan"
+RUST_LOG = "debug"
+WORKSPACE_NAME = "{{project-name}}"

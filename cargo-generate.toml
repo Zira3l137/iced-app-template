@@ -1,0 +1,6 @@
+[template]
+# Exclude binary files and files where {{}} syntax should be preserved
+exclude = [
+    "resources/**", # Exclude all resource files (fonts, images, etc.)
+    "**/macros.rs", # Exclude macros that use {{}} syntax
+]

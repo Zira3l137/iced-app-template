@@ -1,0 +1,19 @@
+
+[package]
+name = "{{project-name}}"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+[dependencies]
+{{project-name}}-utils.path = "../{{project-name}}-utils"
+{{project-name}}-theme.path = "../{{project-name}}-theme"
+{{project-name}}-persistence.path = "../{{project-name}}-persistence"
+{{project-name}}-config.path = "../{{project-name}}-config"
+
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true
+
+iced.workspace = true
+serde.workspace = true

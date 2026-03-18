@@ -1,19 +1,35 @@
 
 [workspace]
-members = ["app", "app-core", "app-cli"] # replace with placeholder
+members = ["crates/*"]
 resolver = "2"
 
 [workspace.package]
 version = "0.1.0"
-authors = ["Zira3l137"] # replace with placeholder
+authors = ["{{authors}}"]
 edition = "2024"
 
 [workspace.dependencies]
-toml = "0.9.10"
-tracing = "0.1.44"
-serde_json = "1.0.148"
-serde = { version = "1.0.228", features = ["derive"] }
-tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
-clap = { version = "4.5.54", features = ["derive"] }
-anyhow = { version = "1.0.100", features = ["backtrace"] }
-iced = { version = "0.14.0", features = ["advanced", "image"] }
+toml = { version = "1.0.7", default-features = true, features = [] }
+tracing = { version = "0.1.44", default-features = false, features = ["std"] }
+tracing-subscriber = { version = "0.3.23", default-features = true, features = [
+    "env-filter",
+    "chrono",
+] }
+sys-locale = { version = "0.3.2", default-features = false, features = [] }
+serde = { version = "1.0.228", default-features = false, features = [
+    "derive",
+    "std",
+] }
+clap = { version = "4.6.0", default-features = false, features = [
+    "derive",
+    "std",
+] }
+anyhow = { version = "1.0.102", default-features = false, features = [
+    "backtrace",
+] }
+iced = { version = "0.14.0", default-features = false, features = [
+    "wgpu",
+    "advanced",
+    "smol",
+    "image",
+] }
