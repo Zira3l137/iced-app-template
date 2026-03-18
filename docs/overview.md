@@ -2,7 +2,7 @@
 
 ## Overview
 
-A Rust desktop application template built on Iced using the daemon model. The core goal is a scalable, macro-friendly architecture where adding a new feature requires minimal manual changes across the codebase.
+A Rust desktop application template built on Iced using the daemon model. The core goal is a scalable, macro-friendly architecture where adding a new feature or window requires minimal manual changes across the codebase. Both are driven by code-generation macros — `register_features!` and `register_windows!` — that handle all dispatch boilerplate.
 
 ---
 
@@ -75,7 +75,7 @@ This also enables the macro to generate dispatch uniformly without knowing which
 
 ## Macro Design Intent
 
-The four generated items:
+### register_features!
 
 ```rust
 register_features!(
@@ -93,6 +93,31 @@ Generates:
 - `route_feature_message()` — dispatches to `f::update(msg, f::ContextMut::new(app))`
 
 Adding a new feature = one line in the macro invocation.
+
+### register_windows!
+
+```rust
+register_windows!(Main {
+    settings: Settings {
+        size: Size::new(800.0, 600.0),
+        exit_on_close_request: false,
+        transparent: true,
+        ..Default::default()
+    },
+    view_handler: main::view,
+    input_handler: main::input,
+    context: main::Context::new
+});
+```
+
+Generates a `Window` enum and implements the following methods for each variant:
+
+- `title()` — returns the variant name as a string
+- `settings()` — returns the declared `iced::window::Settings`
+- `view(&App, window_id)` — constructs the context and delegates to the view handler
+- `input(&InputEvent)` — delegates to the input handler, returning `Task<Message>`
+
+Adding a new window = one entry in the macro invocation.
 
 ---
 
@@ -113,27 +138,28 @@ Window close requests route to `SystemMessage::HideWindow(id)`.
 
 ## Entry Point
 
-File paths are hardcoded as constants. Config, locales, fonts, and icon are all loaded at runtime before the daemon starts.
+File paths are hardcoded as `LazyLock<&Path>` statics. Config, locales, fonts, and icon are all loaded at runtime before the daemon starts.
 
 ```rust
-const SETTINGS_PATH: &str = "…";
-const LOCALES_PATH:  &str = "…";
-const FONTS_PATH:    &str = "…";
-const ICON_PATH:     &str = "…";
+static CONFIG:  LazyLock<&Path> = LazyLock::new(|| Path::new("app_config.toml"));
+static LOCALES: LazyLock<&Path> = LazyLock::new(|| Path::new("resources/locales"));
+static IMAGES:  LazyLock<&Path> = LazyLock::new(|| Path::new("resources/images"));
+static FONTS:   LazyLock<&Path> = LazyLock::new(|| Path::new("resources/fonts"));
 ```
 
 Loading order:
 
 ```
-read_config(SETTINGS_PATH)   — parses TOML, yields Settings (e.g. default_font name)
-read_locales(LOCALES_PATH)   — yields Vec<Locale>
-read_fonts(FONTS_PATH)       — yields Vec<Cow<'static, [u8]>>
-read_icon(ICON_PATH)         — yields Option<Icon>
+read_settings(*CONFIG)            — parses TOML, yields Settings (e.g. default_font name)
+read_available_locales(*LOCALES)  — yields Vec<Locale>
+read_fonts(*FONTS)                — yields Vec<Cow<'static, [u8]>>
+icon::from_file(IMAGES/icon.ico)  — yields Option<Icon>
 ```
 
 Guards:
 - Abort if no locales found (logged via `tracing::error!`)
 - `Box::leak` used for the default font name to satisfy `iced::Font::with_name`'s `'static` requirement
+- Icon load failure is logged but non-fatal (`inspect_err` + `.ok()`)
 
 ---
 
@@ -146,7 +172,7 @@ Guards:
 | Per-feature `State` structs in `FeaturesState` | Clear ownership; each feature defaults independently |
 | Input routed through `SystemMessage` | Centralizes event handling; avoids `Window` producing raw tasks |
 | Daemon model (not `application`) | Required for multi-window support |
-| Hardcoded config paths as constants | Pragmatic; template user places them where they prefer |
+| Hardcoded paths as `LazyLock<&Path>` statics | Pragmatic; template user places them where they prefer |
 
 ---
 
