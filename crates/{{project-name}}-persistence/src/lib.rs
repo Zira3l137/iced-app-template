@@ -12,13 +12,12 @@ pub trait Persistent {
     fn write_state<P: AsRef<Path>>(path: P, state: &Self::State) -> Result<()> {
         let mut path = path.as_ref().to_path_buf();
         if path.is_dir() || !path.exists() {
-            create_dir_all(&path).context("Failed to create session directory")?;
+            create_dir_all(&path).context("Failed to create state directory")?;
             path = path.join("state.toml");
         }
 
-        let session_string =
-            toml::to_string_pretty(state).context("Failed to serialize session")?;
-        write(path, session_string)?;
+        let state_string = toml::to_string_pretty(state).context("Failed to serialize state")?;
+        write(path, state_string)?;
 
         Ok(())
     }
@@ -26,20 +25,20 @@ pub trait Persistent {
     fn read_state<P: AsRef<Path>>(path: P) -> Option<Self::State> {
         let path = path.as_ref();
         if !path.exists() {
-            tracing::warn!("Session file was not found");
+            tracing::warn!("State file was not found");
             return None;
         }
 
-        let Ok(session_json) = read_to_string(path) else {
-            tracing::error!("Failed to read session file");
+        let Ok(state_json) = read_to_string(path) else {
+            tracing::error!("Failed to read state file");
             return None;
         };
 
-        let Ok(session): StdResult<Self::State, _> = toml::from_str(session_json.as_str()) else {
-            tracing::error!("Failed to deserialize session");
+        let Ok(state): StdResult<Self::State, _> = toml::from_str(state_json.as_str()) else {
+            tracing::error!("Failed to deserialize state");
             return None;
         };
 
-        Some(session)
+        Some(state)
     }
 }

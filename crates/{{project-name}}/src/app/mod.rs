@@ -57,7 +57,7 @@ impl App {
                     if let Err(e) =
                         <Self as Persistent>::write_state(STATE_PATH, &self.persistent_state)
                     {
-                        tracing::error!("Failed to write session: {}", e);
+                        tracing::error!("Failed to write state: {}", e);
                     };
 
                     tracing::info!("Exiting application");
