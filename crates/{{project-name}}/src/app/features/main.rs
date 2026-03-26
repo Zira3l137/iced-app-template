@@ -6,7 +6,7 @@ use crate::app::{
     state::FeatureMessage,
 };
 
-use {{project-name}}_utils::locale::Locale;
+use {{crate_name}}_utils::locale::Locale;
 use iced::{
     Element, Length, Task, Theme, keyboard, mouse,
     theme::Base,

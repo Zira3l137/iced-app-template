@@ -3,8 +3,8 @@ use crate::{
     macros::{register_features, register_windows},
 };
 
-use {{project-name}}_theme::load_available_themes;
-use {{project-name}}_utils::locale::Locale;
+use {{crate_name}}_theme::load_available_themes;
+use {{crate_name}}_utils::locale::Locale;
 use iced::{
     Size, Theme,
     window::{Icon, Id, Settings},

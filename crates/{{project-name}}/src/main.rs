@@ -3,8 +3,8 @@ mod macros;
 
 use std::{path::Path, sync::LazyLock};
 
-use {{project-name}}_config::read_settings;
-use {{project-name}}_utils::{cli, io::read_fonts, locale::read_available_locales, logging};
+use {{crate_name}}_config::read_settings;
+use {{crate_name}}_utils::{cli, io::read_fonts, locale::read_available_locales, logging};
 
 use anyhow::{Context, Result, anyhow};
 use iced::{Font, Settings, daemon, window::icon};

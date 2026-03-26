@@ -2,8 +2,8 @@ mod features;
 mod message;
 mod state;
 
-use {{project-name}}_persistence::Persistent;
-use {{project-name}}_utils::locale::{Locale, get_system_locale};
+use {{crate_name}}_persistence::Persistent;
+use {{crate_name}}_utils::locale::{Locale, get_system_locale};
 
 use crate::app::message::InputEvent;
 

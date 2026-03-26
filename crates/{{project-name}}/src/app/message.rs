@@ -1,5 +1,5 @@
 use crate::app::state::{FeatureMessage, Window};
-use {{project-name}}_utils::command::Command;
+use {{crate_name}}_utils::command::Command;
 
 use iced::{keyboard::Event as KeyboardEvent, mouse::Event as MouseEvent, window::Id};
 
