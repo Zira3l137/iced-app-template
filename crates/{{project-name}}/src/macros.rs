@@ -6,7 +6,7 @@ macro_rules! register_features {
         #[derive(Debug, Clone)]
         pub enum FeatureMessage {
             $(
-                $feature($crate::app::features::$module::Message)
+                $feature($crate::app::features::$module::Message),
             )+
         }
 
