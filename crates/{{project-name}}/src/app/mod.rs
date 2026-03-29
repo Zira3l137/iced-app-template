@@ -97,11 +97,10 @@ impl App {
                     if self.app_state.windows.remove(&target_id).is_none() {
                         return Task::none();
                     }
-                    window::close(target_id).chain(if !self.app_state.windows.is_empty() {
-                        return Task::none();
-                    } else {
-                        Task::done(Message::System(SystemMessage::Exit))
-                    })
+                    let task = (self.app_state.windows.is_empty())
+                        .then_some(Task::done(Message::System(SystemMessage::Exit)))
+                        .unwrap_or(window::close(target_id));
+                    task
                 }
 
 
