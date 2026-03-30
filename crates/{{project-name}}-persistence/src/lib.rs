@@ -11,7 +11,7 @@ pub trait Persistent {
 
     fn write_state<P: AsRef<Path>>(path: P, state: &Self::State) -> Result<()> {
         let mut path = path.as_ref().to_path_buf();
-        if path.is_dir() || !path.exists() {
+        if path.extension().is_none() {
             create_dir_all(&path).context("Failed to create state directory")?;
             path = path.join("state.toml");
         }
