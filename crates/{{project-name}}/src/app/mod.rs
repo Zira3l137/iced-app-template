@@ -90,18 +90,26 @@ impl App {
 
                     let (id, task) = window::open(settings);
                     self.app_state.windows.insert(id, target_window);
+                    if Window::Main == target_window {
+                        self.app_state.main_window_id = Some(id);
+                    }
                     task.discard()
                 }
 
                 AppMessage::Hide(target_id) => {
+                    let Some(main_id) = self.app_state.main_window_id else {
+                        return Task::none();
+                    };
+
                     if self.app_state.windows.remove(&target_id).is_none() {
                         return Task::none();
                     }
-                    let task = (self.app_state.windows.is_empty())
-                        .then_some(Task::done(Message::System(SystemMessage::Exit)))
-                        .unwrap_or(window::close(target_id));
-                    task
-                }
+
+                    if self.app_state.windows.is_empty() || target_id == main_id {
+                        Task::done(Message::System(SystemMessage::Exit))
+                    } else {
+                        window::close(target_id)
+                    }
 
 
                 AppMessage::Input(window_id, input) => {
