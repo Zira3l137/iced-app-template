@@ -110,6 +110,7 @@ impl App {
                     } else {
                         window::close(target_id)
                     }
+                }
 
 
                 AppMessage::Input(window_id, input) => {
