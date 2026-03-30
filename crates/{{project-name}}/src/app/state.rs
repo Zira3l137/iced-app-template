@@ -16,6 +16,7 @@ const THEMES_PATH: &str = "themes";
 #[derive(Debug, Clone, Default)]
 pub struct AppState {
     pub icon: Option<Icon>,
+    pub main_window_id: Option<Id>,
     pub windows: HashMap<Id, Window>,
     pub themes: HashMap<String, Theme>,
     pub locales: HashMap<String, Locale>,
